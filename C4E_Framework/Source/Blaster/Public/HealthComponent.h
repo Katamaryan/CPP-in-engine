@@ -6,6 +6,9 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthModifiedSignature, bool, bPositive, float, NewHealth, float, HealthDelta, float, HealthRatio);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDeathSignature, AController*, Instigator, AActor*, Causer);
+
 UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BLASTER_API UHealthComponent : public UActorComponent
 {
@@ -20,6 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 public:
+	//define variables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite);
 	bool bIsDead = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite);
@@ -29,6 +33,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite);
 	float MaxHealth;
 	
+	//define functions
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	bool IsDead();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
@@ -37,4 +42,12 @@ public:
 	void CheckDeath(AController* Instigator, AActor* Causer);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void ResetHealth();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ApplyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	//Define Delegates
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FHealthModifiedSignature OnHealthModified;
+	UPROPERTY(BlueprintCallable, blueprintassignable)
+	FDeathSignature OnDeath;
 };

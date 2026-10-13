@@ -20,8 +20,25 @@ void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	//gets the owner of the health component, binds to the OnTakeAnyDamage event dispatcher,
+	//and calls the applyDamage function as a listener to the dispatcher as a unique listener
+	GetOwner()->OnTakeAnyDamage.AddUniqueDynamic(this, &UHealthComponent::ApplyDamage);
 	
+}
+
+void UHealthComponent::ApplyDamage_Implementation(AActor* DamagedActor, float Damage,
+	const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
+{
+	if ( bIsDead || bIsInvulnerable )
+	{
+		return;
+	}
+	else
+	{
+		CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaxHealth);
+		OnHealthModified.Broadcast(Damage > 0.0f, CurrentHealth, Damage, CurrentHealth / MaxHealth);
+		CheckDeath_Implementation(InstigatedBy, DamageCauser);
+	}
 }
 
 void UHealthComponent::ResetHealth_Implementation()
@@ -29,16 +46,16 @@ void UHealthComponent::ResetHealth_Implementation()
 	CurrentHealth = MaxHealth;
 	bIsDead = false;
 	bIsInvulnerable = false;
-	//TODO EventDispatcher goes here
+	OnHealthModified.Broadcast(false, CurrentHealth, 0.0f, CurrentHealth / MaxHealth);
 }
 
 void UHealthComponent::CheckDeath_Implementation(AController* Instigator, AActor* Causer)
 {
-	if (CurrentHealth <= 0)
+	if (CurrentHealth <= 0.0f)
 	{
 		bIsDead = true;
+		OnDeath.Broadcast(Instigator, Causer);
 	}
-	//TODO EventDispatcher goes here later
 }
 
 float UHealthComponent::GetCurrentHealth_Implementation()
