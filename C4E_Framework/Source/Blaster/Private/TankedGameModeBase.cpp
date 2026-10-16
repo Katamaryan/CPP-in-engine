@@ -3,6 +3,11 @@
 
 #include "TankedGameModeBase.h"
 
+void ATankedGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void ATankedGameModeBase::OnRuleCompleted_Implementation(int ruleID, bool successful)
 {
 }
@@ -20,3 +25,4 @@ bool ATankedGameModeBase::CheckRules_Implementation(int ruleID, bool successful)
 	//placeholder cs the red squiggly gonna pmo the whole time otherwise
 	return true;
 }
+

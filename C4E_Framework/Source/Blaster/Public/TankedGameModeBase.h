@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BaseGameRule.h"
 #include "GameFramework/GameModeBase.h"
 #include "TankedGameModeBase.generated.h"
 
