@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseGameRule.h"
 #include "GameFramework/GameModeBase.h"
 #include "TankedGameModeBase.generated.h"
 
+class UBaseGameRule;
 /**
  * 
  */
@@ -31,6 +31,13 @@ public:
 	
 	UFUNCTION(Blueprintcallable, BlueprintNativeEvent)
 	bool CheckRules(int ruleID, bool successful);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void CreateUIElementsForRules();
+	UFUNCTION(BlueprintNativeEvent)
+	void OnEndTimerComplete();
 	
+private:
+	FTimerHandle EndGameTimerHandle;
 };
 
