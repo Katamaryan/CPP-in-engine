@@ -47,6 +47,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UHealthComponent> _health;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanFire;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector RespawnPoint;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float RespawnTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTimerHandle RespawnTimerHandle;
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
@@ -55,4 +64,9 @@ public:
 	virtual void IMove_Implementation(float inputValue) override;
 	virtual void ITurn_Implementation(float inputValue) override;
 	virtual void IPrimaryAction_Implementation(bool inputClicked) override;
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void FireProjectile();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Respawn();
 };
