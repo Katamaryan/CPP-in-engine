@@ -7,6 +7,7 @@
 #include "Inputable.h"
 #include "Tank.generated.h"
 
+class ATankShot;
 class UArrowComponent;
 
 class UStaticMeshComponent;
@@ -46,7 +47,12 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UHealthComponent> _health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<ATankShot> TankShot;
 	
+	int FirePoint;
+	bool Gun01;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanFire;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -66,7 +72,9 @@ public:
 	virtual void IPrimaryAction_Implementation(bool inputClicked) override;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void FireProjectile();
+	void FireProjectile(UArrowComponent* firePoint, bool gun01);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Respawn();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ResetFire();
 };

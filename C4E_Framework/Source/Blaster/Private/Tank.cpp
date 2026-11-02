@@ -5,6 +5,7 @@
 
 #include "CascadeParticleSystemComponent.h"
 #include "HealthComponent.h"
+#include "TankShot.h"
 #include "Camera/CameraComponent.h"
 #include "Components/ArrowComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -104,6 +105,7 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	FirePoint = 1;
 }
 
 // Called every frame
@@ -151,8 +153,19 @@ void ATank::IPrimaryAction_Implementation(bool inputClicked)
 	
 	if (bCanFire)
 	{
-		//TODO
+		bCanFire = false;
+		Gun01 =  (FirePoint < 3) ? true : false;
+			
+		FireProjectile_Implementation(_arrow[FirePoint], Gun01);
+		FirePoint = FirePoint + 1;
+		if (FirePoint > 4)
+			FirePoint = 1;
 	}
+}
+
+void ATank::ResetFire_Implementation()
+{
+	bCanFire = true;
 }
 
 void ATank::Respawn_Implementation()
@@ -165,8 +178,16 @@ void ATank::Respawn_Implementation()
 	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
-void ATank::FireProjectile_Implementation()
+void ATank::FireProjectile_Implementation(UArrowComponent* firePoint, bool gun01)
 {
-	//TODO
+	if (!TankShot)
+		return;
+	
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParameters.Instigator = this;
+	FVector SpawnLocation = firePoint->GetComponentLocation();
+	FRotator SpawnRotation = firePoint->GetComponentRotation();
+	GetWorld()->SpawnActor(TankShot, &SpawnLocation, &SpawnRotation, SpawnParameters);
 }
 
