@@ -8,8 +8,11 @@
 #include "TankShot.h"
 #include "Camera/CameraComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -19,10 +22,7 @@ ATank::ATank()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	// _arrow.Init(nullptr, 5);
-	// _staticMesh.Init(nullptr, 6);
-	// _particleSystem.Init(nullptr, 2);
-	
+	//CapsuleComponent->SetCapsuleHalfHeight(25.22f);
 	int a = 0;
 	_arrow.Add(CreateDefaultSubobject<UArrowComponent>(TEXT("RotTracks")));
 	_arrow[a]->SetupAttachment(RootComponent);
@@ -98,14 +98,22 @@ ATank::ATank()
 	
 	_health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 	
+	Gun1Recoil = CreateDefaultSubobject<UTimelineComponent>(TEXT("Gun1 Timeline"));
+	Gun2Recoil = CreateDefaultSubobject<UTimelineComponent>(TEXT("Gun2 Timeline"));
 }
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	FirePoint = 1;
+
+	if (RecoilCurve)
+	{
+		OnGun1Update.BindDynamic(this, &ATank::Gun1Tick);
+		Gun1Recoil->AddInterpFloat(RecoilCurve, OnGun1Update);
+		OnGun2Update.BindDynamic(this, &ATank::Gun2Tick);
+		Gun2Recoil->AddInterpFloat(RecoilCurve, OnGun2Update);
+	}
 }
 
 // Called every frame
@@ -145,7 +153,7 @@ void ATank::IPrimaryAction_Implementation(bool inputClicked)
 	//UE_LOG(LogTemp, Warning, TEXT("IPRIMARYACTION_IMPLEMENTATION called with value %hhd"), inputClicked);
 	
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
-		FString::Printf(TEXT("IPRIMARYACTION_IMPLEMENTATION called with value %hhd"), inputClicked));
+		FString::Printf(TEXT("Projectile fire from %hhd"), Gun01));
 	
 	if (!inputClicked) {return;}
 	
@@ -153,14 +161,41 @@ void ATank::IPrimaryAction_Implementation(bool inputClicked)
 	
 	if (bCanFire)
 	{
+		
 		bCanFire = false;
-		Gun01 =  (FirePoint < 3) ? true : false;
-			
+		
+		if (GunSide)
+		{
+			if (GunBarrel)
+				FirePoint = 1;
+			else
+				FirePoint = 2;
+			Gun01 = true;
+		}
+		else
+		{
+			if (GunBarrel)
+				FirePoint = 3;
+			else
+				FirePoint = 4;
+			GunBarrel = !GunBarrel;
+			Gun01 = false;
+		}
+		GunSide = !GunSide;
+		
 		FireProjectile_Implementation(_arrow[FirePoint], Gun01);
-		FirePoint = FirePoint + 1;
-		if (FirePoint > 4)
-			FirePoint = 1;
 	}
+}
+
+void ATank::Gun1Tick(float value)
+{
+	_staticMesh[4]->SetRelativeLocation(FVector(value, 15.0f, 0.0f));
+}
+
+void ATank::Gun2Tick(float value)
+{
+	_staticMesh[5]->SetRelativeLocation(FVector(value, -15.0f, 0.0f));
+	
 }
 
 void ATank::ResetFire_Implementation()
@@ -189,5 +224,17 @@ void ATank::FireProjectile_Implementation(UArrowComponent* firePoint, bool gun01
 	FVector SpawnLocation = firePoint->GetComponentLocation();
 	FRotator SpawnRotation = firePoint->GetComponentRotation();
 	GetWorld()->SpawnActor(TankShot, &SpawnLocation, &SpawnRotation, SpawnParameters);
+	
+	UGameplayStatics::SpawnEmitterAtLocation(this, Shotbase, SpawnLocation, 
+			SpawnRotation, FVector(1.0f, 1.0f, 1.0f));
+	
+	if (gun01)
+		Gun1Recoil->PlayFromStart();
+	else
+	{
+		Gun2Recoil->PlayFromStart();
+	}
+	
+	GetWorldTimerManager().SetTimer(ResetFireTimerHandle, this, &ATank::ResetFire, 0.2f);
 }
 

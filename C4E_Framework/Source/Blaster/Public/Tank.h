@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Inputable.h"
+#include "Components/TimelineComponent.h"
 #include "Tank.generated.h"
 
+class UTimelineComponent;
 class ATankShot;
 class UArrowComponent;
 
@@ -47,12 +49,27 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UHealthComponent> _health;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UCapsuleComponent> _playerCollider;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<ATankShot> TankShot;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UParticleSystem> Shotbase;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UTimelineComponent> Gun1Recoil;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UTimelineComponent> Gun2Recoil;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UCurveFloat> RecoilCurve;
+	FOnTimelineFloat OnGun1Update;
+	FOnTimelineFloat OnGun2Update;
 	int FirePoint;
 	bool Gun01;
+	bool GunSide = true;
+	bool GunBarrel = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanFire;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -61,6 +78,8 @@ public:
 	float RespawnTime;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTimerHandle RespawnTimerHandle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTimerHandle ResetFireTimerHandle;
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -77,4 +96,8 @@ public:
 	void Respawn();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void ResetFire();
+	UFUNCTION()
+	void Gun1Tick(float value);
+	UFUNCTION()
+	void Gun2Tick(float value);
 };
