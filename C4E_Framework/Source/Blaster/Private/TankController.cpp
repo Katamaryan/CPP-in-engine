@@ -3,6 +3,8 @@
 
 #include "TankController.h"
 #include "Inputable.h"
+#include "MainUIWidget.h"
+#include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void ATankController::OnForward(const FInputActionInstance& Instance)
@@ -46,6 +48,12 @@ void ATankController::OnPossess(APawn* InPawn)
 		}
 	}
 
+	if (MainUI)
+	{
+		MainUIRef = CreateWidget<UMainUIWidget, ATankController*>(this, MainUI.Get());
+		MainUIRef->AddToViewport();
+	}
+	
 	SetShowMouseCursor(true);
 }
 

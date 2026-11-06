@@ -25,7 +25,9 @@ void ATankShot::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankShot::KillShot, 0.25f, false);
+	//bruh, i didnt know i had to bind the collision event to the function
+	Sphere->OnComponentBeginOverlap.AddUniqueDynamic(this, &ATankShot::CollisionHandler);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankShot::KillShot, 0.75f, false);
 }
 
 void ATankShot::KillShot_Implementation()

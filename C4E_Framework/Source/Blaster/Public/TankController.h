@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "TankController.generated.h"
 
+class UMainUIWidget;
 /**
  * 
  */
@@ -27,6 +28,11 @@ public:
 	TObjectPtr<UInputAction> TurnAction;
 	UPROPERTY(EditAnywhere, blueprintReadWrite, category = Input)
 	TObjectPtr<UInputAction> FireAction;
+	
+	UPROPERTY(EditAnywhere, blueprintReadWrite, category = UserInterface)
+	TSubclassOf<UMainUIWidget> MainUI;
+	UPROPERTY(VisibleAnywhere, category = UserInterface)
+	TObjectPtr<UMainUIWidget> MainUIRef;
 	
 private:
 	void OnForward(const FInputActionInstance& Instance);
