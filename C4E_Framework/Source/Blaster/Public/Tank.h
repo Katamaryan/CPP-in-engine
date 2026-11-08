@@ -18,6 +18,8 @@ class UCameraComponent;
 class USpringArmComponent;
 class UCascadeParticleSystemComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealthUpdatedSignature, float, HealthRatio);
+
 UCLASS(Abstract)
 class BLASTER_API ATank : public ACharacter, public IInputable
 {
@@ -57,6 +59,9 @@ public:
 	TSubclassOf<ATankShot> TankShot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UParticleSystem> DeathExplosion;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UParticleSystem> Shotbase;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UTimelineComponent> Gun1Recoil;
@@ -70,6 +75,7 @@ public:
 	bool Gun01;
 	bool GunSide = true;
 	bool GunBarrel = true;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanFire;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -80,6 +86,7 @@ public:
 	FTimerHandle RespawnTimerHandle;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTimerHandle ResetFireTimerHandle;
+	
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -100,4 +107,12 @@ public:
 	void Gun1Tick(float value);
 	UFUNCTION()
 	void Gun2Tick(float value);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void HealthChangedHandler(bool bPositive, float newHealth, float healthDelta, float healthRatio);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TankDestroyed(AController* InstigatedBy, AActor* Causer);
+	
+	
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FHealthUpdatedSignature OnHealthUpdated;
 };

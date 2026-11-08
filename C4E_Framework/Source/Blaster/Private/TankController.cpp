@@ -4,6 +4,7 @@
 #include "TankController.h"
 #include "Inputable.h"
 #include "MainUIWidget.h"
+#include "Tank.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -52,6 +53,10 @@ void ATankController::OnPossess(APawn* InPawn)
 	{
 		MainUIRef = CreateWidget<UMainUIWidget, ATankController*>(this, MainUI.Get());
 		MainUIRef->AddToViewport();
+		if (ATank* tank = Cast<ATank>(InPawn))
+		{
+			tank->OnHealthUpdated.AddUniqueDynamic(MainUIRef, &UMainUIWidget::UpdateHealthBar);
+		}
 	}
 	
 	SetShowMouseCursor(true);

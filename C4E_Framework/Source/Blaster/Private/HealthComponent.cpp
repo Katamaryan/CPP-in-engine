@@ -20,6 +20,8 @@ void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
+	CurrentHealth = MaxHealth;
 	//gets the owner of the health component, binds to the OnTakeAnyDamage event dispatcher,
 	//and calls the applyDamage function as a listener to the dispatcher as a unique listener
 	GetOwner()->OnTakeAnyDamage.AddUniqueDynamic(this, &UHealthComponent::ApplyDamage);

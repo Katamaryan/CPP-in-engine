@@ -114,6 +114,11 @@ void ATank::BeginPlay()
 		OnGun2Update.BindDynamic(this, &ATank::Gun2Tick);
 		Gun2Recoil->AddInterpFloat(RecoilCurve, OnGun2Update);
 	}
+	if (_health)
+	{
+		_health->OnHealthModified.AddUniqueDynamic(this, &ATank::HealthChangedHandler);
+		_health->OnDeath.AddUniqueDynamic(this, &ATank::TankDestroyed);
+	}	
 }
 
 // Called every frame
@@ -152,8 +157,8 @@ void ATank::IPrimaryAction_Implementation(bool inputClicked)
 	//this one is crap  and i think it stinks cus i cant properly see it while im debugging easily
 	//UE_LOG(LogTemp, Warning, TEXT("IPRIMARYACTION_IMPLEMENTATION called with value %hhd"), inputClicked);
 	
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
-		FString::Printf(TEXT("Projectile fire from %hhd"), Gun01));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+	//	FString::Printf(TEXT("Projectile fire from %hhd"), Gun01));
 	
 	if (!inputClicked) {return;}
 	
@@ -196,6 +201,21 @@ void ATank::Gun2Tick(float value)
 {
 	_staticMesh[5]->SetRelativeLocation(FVector(value, -15.0f, 0.0f));
 	
+}
+
+void ATank::TankDestroyed_Implementation(AController* InstigatedBy, AActor* Causer)
+{
+	if (RespawnTimerHandle.IsValid()) {return;}
+	
+	GetCharacterMovement()->DisableMovement();
+	GetCapsuleComponent()->SetVisibility(false, true);
+	UGameplayStatics::SpawnEmitterAtLocation(this, DeathExplosion, GetActorLocation(), GetActorRotation());
+	GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ATank::Respawn_Implementation, RespawnTime);
+}
+
+void ATank::HealthChangedHandler_Implementation(bool bPositive, float newHealth, float healthDelta, float healthRatio)
+{
+	OnHealthUpdated.Broadcast(healthRatio);
 }
 
 void ATank::ResetFire_Implementation()
