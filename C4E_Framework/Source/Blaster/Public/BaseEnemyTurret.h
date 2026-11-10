@@ -38,15 +38,20 @@ public:
 	TObjectPtr<UParticleSystem> EnemyDeath;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<ATank> TankREF;
+	AActor* TankREF;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float FireRate;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTimerHandle FireRateHandle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Range;
+	
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void TurretDestroyed(AController* InstigatedBy, AActor* Causer);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Fire();
+	UFUNCTION(BlueprintCallable)
+	virtual void TurretFire();
 	
 };
