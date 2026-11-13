@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
 #include "BaseEnemyTurret.generated.h"
 
+class UTargetComponent;
+class UTimelineComponent;
 class ATank;
 class UHealthComponent;
 class UBoxComponent;
@@ -36,6 +39,9 @@ public:
 	TObjectPtr<UHealthComponent> _health;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UParticleSystem> EnemyDeath;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UTargetComponent> _target;
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AActor* TankREF;
@@ -45,12 +51,19 @@ public:
 	FTimerHandle FireRateHandle;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Range;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UTimelineComponent> TurretRecoil ;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UCurveFloat> RecoilCurve ;
+	FOnTimelineFloat OnTurretUpdate;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void TurretDestroyed(AController* InstigatedBy, AActor* Causer);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Fire();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TurretGunShake(float value);
+	
 	UFUNCTION(BlueprintCallable)
 	virtual void TurretFire();
 	

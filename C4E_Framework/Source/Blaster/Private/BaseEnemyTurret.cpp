@@ -6,8 +6,8 @@
 #include "HealthComponent.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "CascadeParticleSystemComponent.h"
 #include "Tank.h"
+#include "TargetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -27,6 +27,7 @@ ABaseEnemyTurret::ABaseEnemyTurret()
 	_staticMesh.Add(CreateDefaultSubobject<UStaticMeshComponent>(FName("DangerZone")));
 	_staticMesh[2]->SetupAttachment(RootComponent);
 	_health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
+	_target = CreateDefaultSubobject<UTargetComponent>(TEXT("Target"));
 	
 	_staticMesh[2]->SetWorldScale3D(FVector(Range, Range, 50.0f));
 }
@@ -41,6 +42,12 @@ void ABaseEnemyTurret::BeginPlay()
 	TankREF = UGameplayStatics::GetActorOfClass(this, ATank::StaticClass());
 	
 	GetWorldTimerManager().SetTimer(FireRateHandle, this, &ABaseEnemyTurret::Fire, FireRate, true);
+
+	if (RecoilCurve)
+	{
+		OnTurretUpdate.BindDynamic(this, &ABaseEnemyTurret::TurretGunShake);
+		TurretRecoil->AddInterpFloat(RecoilCurve, OnTurretUpdate);
+	}
 }
 
 // Called every frame
@@ -55,6 +62,11 @@ void ABaseEnemyTurret::Tick(float DeltaTime)
 	_staticMesh[1]->SetWorldRotation(FRotator(0.0f, newRotation.Yaw, 0.0f));
 }
 
+void ABaseEnemyTurret::TurretGunShake_Implementation(float value)
+{
+	_staticMesh[1]->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, value + 7), FRotator(0.0f - value, _staticMesh[1]->GetRelativeRotation().Yaw, 0.0f));
+}
+
 void ABaseEnemyTurret::TurretFire()
 {
 }
@@ -62,8 +74,8 @@ void ABaseEnemyTurret::TurretFire()
 void ABaseEnemyTurret::Fire_Implementation()
 {
 	ETraceTypeQuery PlayerTraceType= UEngineTypes::ConvertToTraceType(ECollisionChannel::ECC_GameTraceChannel1);
-	FHitResult poo;
-	if (UKismetSystemLibrary::SphereTraceSingle(this,GetActorLocation(),  FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 1.0f), Range, PlayerTraceType, false, {}, EDrawDebugTrace::ForDuration, poo, true))
+	FHitResult HitResult;
+	if (UKismetSystemLibrary::SphereTraceSingle(this,GetActorLocation(),  FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 1.0f), Range, PlayerTraceType, false, {}, EDrawDebugTrace::ForDuration, HitResult, true))
 	{
 		TurretFire();
 	}
