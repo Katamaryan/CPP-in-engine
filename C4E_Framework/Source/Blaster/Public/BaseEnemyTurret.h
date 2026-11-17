@@ -39,9 +39,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UHealthComponent> _health;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UParticleSystem> EnemyDeath;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UTargetComponent> _target;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UParticleSystem> EnemyDeath;
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -53,7 +53,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Range;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UTimelineComponent> TurretRecoil ;
+	TObjectPtr<UTimelineComponent> TurretRecoil;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UCurveFloat> RecoilCurve ;
 	FOnTimelineFloat OnTurretUpdate;
