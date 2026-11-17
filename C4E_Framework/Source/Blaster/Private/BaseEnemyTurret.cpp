@@ -19,19 +19,30 @@ ABaseEnemyTurret::ABaseEnemyTurret()
 	
 	_box = CreateDefaultSubobject<UBoxComponent>(FName("Box"));
 	RootComponent = _box;
+	_box->SetBoxExtent(FVector(15.0f, 15.0f, 30.0f));
 	
 	_staticMesh.Add(CreateDefaultSubobject<UStaticMeshComponent>(FName("Baseplate")));
 	_staticMesh[0]->SetupAttachment(RootComponent);
+	_staticMesh[0]->SetRelativeLocation(FVector(0.0f, 0.0f, -30.0f));
 	_staticMesh.Add(CreateDefaultSubobject<UStaticMeshComponent>(FName("TurretSpin")));
 	_staticMesh[1]->SetupAttachment(_staticMesh[0]);
+	_staticMesh[1]->SetRelativeLocation(FVector(0.0f, 0.0f, 7.0f));
 	_staticMesh.Add(CreateDefaultSubobject<UStaticMeshComponent>(FName("DangerZone")));
 	_staticMesh[2]->SetupAttachment(RootComponent);
 	_health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 	_target = CreateDefaultSubobject<UTargetComponent>(TEXT("Target"));
 	
-	_staticMesh[2]->SetWorldScale3D(FVector(Range, Range, 50.0f));
+	TurretRecoil = CreateDefaultSubobject<UTimelineComponent>(TEXT("Recoil Timeline"));
+	
+	
 }
 
+void ABaseEnemyTurret::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+	_staticMesh[2]->SetWorldScale3D(FVector(Range, Range, 50.0f));
+	_health->CurrentHealth = _health->MaxHealth;
+}
 // Called when the game starts or when spawned
 void ABaseEnemyTurret::BeginPlay()
 {
@@ -49,6 +60,7 @@ void ABaseEnemyTurret::BeginPlay()
 		TurretRecoil->AddInterpFloat(RecoilCurve, OnTurretUpdate);
 	}
 }
+
 
 // Called every frame
 void ABaseEnemyTurret::Tick(float DeltaTime)

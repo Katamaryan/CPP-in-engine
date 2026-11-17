@@ -6,6 +6,8 @@
 #include "BaseEnemyTurret.h"
 #include "EnemyMachineGun.generated.h"
 
+class UArrowComponent;
+
 UCLASS()
 class BLASTER_API AEnemyMachineGun : public ABaseEnemyTurret
 {
@@ -20,6 +22,16 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UArrowComponent> _arrow;
+	
+	
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	virtual void TurretFire() override;
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void beamtarget(FVector start, FVector end, bool didHit);
 };
