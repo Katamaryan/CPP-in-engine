@@ -34,6 +34,15 @@ void AEnemyLighting::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (FireCurve)
+	{
+		
+	}
+	
+	if (FXBuildupCurve)
+	{
+		
+	}
 }
 
 // Called every frame

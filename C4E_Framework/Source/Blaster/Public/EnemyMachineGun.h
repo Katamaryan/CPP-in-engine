@@ -32,6 +32,8 @@ public:
 	
 	virtual void TurretFire() override;
 	
+	virtual void TurretGunShake(float value) override;
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void beamtarget(FVector start, FVector end, bool didHit);
 };

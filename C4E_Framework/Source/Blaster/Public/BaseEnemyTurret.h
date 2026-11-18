@@ -62,9 +62,9 @@ public:
 	void TurretDestroyed(AController* InstigatedBy, AActor* Causer);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Fire();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void TurretGunShake(float value);
 	
+	UFUNCTION(BlueprintCallable)
+	virtual void TurretGunShake(float value);
 	UFUNCTION(BlueprintCallable)
 	virtual void TurretFire();
 	

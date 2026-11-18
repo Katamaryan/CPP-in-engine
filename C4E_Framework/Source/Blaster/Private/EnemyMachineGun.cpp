@@ -19,6 +19,8 @@ AEnemyMachineGun::AEnemyMachineGun()
 	_arrow->SetupAttachment(_staticMesh[1]);
 	_arrow->SetArrowSize(0.2f);
 	_arrow->SetRelativeLocation(FVector(32.0f, 0.0f, 18.0f));
+
+
 }
 
 // Called when the game starts or when spawned
@@ -53,5 +55,12 @@ void AEnemyMachineGun::TurretFire()
 	}
 	
 	TurretRecoil->PlayFromStart();
+}
+
+void AEnemyMachineGun::TurretGunShake(float value)
+{
+	Super::TurretGunShake(value);
+	
+	_staticMesh[1]->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, value + 7), FRotator(0.0f - value, _staticMesh[1]->GetRelativeRotation().Yaw, 0.0f));
 }
 

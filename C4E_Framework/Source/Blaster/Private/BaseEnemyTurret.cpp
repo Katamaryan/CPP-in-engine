@@ -74,9 +74,9 @@ void ABaseEnemyTurret::Tick(float DeltaTime)
 	_staticMesh[1]->SetWorldRotation(FRotator(0.0f, newRotation.Yaw, 0.0f));
 }
 
-void ABaseEnemyTurret::TurretGunShake_Implementation(float value)
+void ABaseEnemyTurret::TurretGunShake(float value)
 {
-	_staticMesh[1]->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, value + 7), FRotator(0.0f - value, _staticMesh[1]->GetRelativeRotation().Yaw, 0.0f));
+	
 }
 
 void ABaseEnemyTurret::TurretFire()
