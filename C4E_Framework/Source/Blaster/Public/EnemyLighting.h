@@ -36,11 +36,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UParticleSystem> LightningHit;
 	
-	bool bCharge1;
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
 	virtual void TurretFire() override;
 	virtual void TurretGunShake(float value) override;
+
+	UFUNCTION(BlueprintCallable, blueprintNativeEvent)
+	void LightningFire();
 };

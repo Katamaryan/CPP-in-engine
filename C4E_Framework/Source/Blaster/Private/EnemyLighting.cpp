@@ -43,14 +43,14 @@ void AEnemyLighting::BeginPlay()
 	
 	if (FireCurve)
 	{
-		OnFire.BindDynamic(this, &AEnemyLighting::TurretFire);
-		TurretRecoil->AddEvent(1, OnFire);
+		OnFire.BindDynamic(this, &AEnemyLighting::LightningFire);
+		TurretRecoil->AddEvent(0.8f, OnFire);
 	}
 	
 	if (FXBuildupCurve)
 	{
-		OnTurretFXBuildup.BindDynamic(this, &ABaseEnemyTurret::TurretGunShake);
-		TurretRecoil->AddInterpFloat(FXBuildupCurve, OnTurretFXBuildup);
+		OnTurretUpdate.BindDynamic(this, &ABaseEnemyTurret::TurretGunShake);
+		TurretRecoil->AddInterpFloat(FXBuildupCurve, OnTurretUpdate);
 	}
 }
 
@@ -64,6 +64,29 @@ void AEnemyLighting::TurretFire()
 {
 	Super::TurretFire();
 	
+	TurretRecoil->PlayFromStart();
+}
+
+void AEnemyLighting::TurretGunShake(float value)
+{
+	Super::TurretGunShake(value);
+
+	float value1 = RecoilCurve->GetFloatValue(TurretRecoil->GetPlaybackPosition());
+	float value2 = FXBuildupCurve->GetFloatValue(TurretRecoil->GetPlaybackPosition());
+	
+	_staticMesh[1]->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, (value1 * 5) + 7), FRotator(0.0f - value, _staticMesh[1]->GetRelativeRotation().Yaw, 0.0f));
+	
+	
+		_lightningCharge[0]->SetFloatParameter(FName("LT1"), value2 * 40);
+		_lightningCharge[0]->SetFloatParameter(FName("LT2"), value2 * 300);
+	
+		_lightningCharge[1]->SetFloatParameter(FName("LT1"), value2 * 40);
+		_lightningCharge[1]->SetFloatParameter(FName("LT2"), value2 * 300);
+		
+}
+
+void AEnemyLighting::LightningFire_Implementation()
+{
 	UGameplayStatics::SpawnEmitterAtLocation(this, LightningBlast, GetActorLocation(), FRotator(0.0f, 0.0f, 0.0f));
 	
 	//idk why unreal makes you put random extra crap for no reason like this
@@ -81,28 +104,6 @@ void AEnemyLighting::TurretFire()
 		UGameplayStatics::ApplyDamage(hitActor, 5.0f, nullptr, nullptr, nullptr);
 		UGameplayStatics::SpawnEmitterAttached(LightningHit, hitComponent, FName("None"), FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
 	}
-}
-
-void AEnemyLighting::TurretGunShake(float value)
-{
-	Super::TurretGunShake(value);
-
-	float value1 = RecoilCurve->GetFloatValue(TurretRecoil->GetPlaybackPosition());
-	float value2 = FXBuildupCurve->GetFloatValue(TurretRecoil->GetPlaybackPosition());
 	
-	_staticMesh[1]->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, (value1 * 5) + 7), FRotator(0.0f - value, _staticMesh[1]->GetRelativeRotation().Yaw, 0.0f));
-	
-	if (bCharge1)
-	{
-		_lightningCharge[0]->SetFloatParameter(FName("LT1"), value2 * 40);
-		_lightningCharge[0]->SetFloatParameter(FName("LT2"), value2 * 300);
-		bCharge1 = false;
-	}
-	else
-	{
-		_lightningCharge[0]->SetFloatParameter(FName("LT1"), value2 * 40);
-		_lightningCharge[0]->SetFloatParameter(FName("LT2"), value2 * 300);
-		bCharge1 = true;
-	}
 }
 
