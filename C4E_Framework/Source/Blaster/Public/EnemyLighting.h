@@ -29,7 +29,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UCurveFloat> FXBuildupCurve;
 	FOnTimelineFloat OnTurretFXBuildup;
+	FOnTimelineEvent OnFire;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UParticleSystem> LightningBlast;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UParticleSystem> LightningHit;
+	
+	bool bCharge1;
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	virtual void TurretFire() override;
+	virtual void TurretGunShake(float value) override;
 };
