@@ -7,6 +7,14 @@
 #include "GameFramework/Actor.h"
 #include "EncounterManager.generated.h"
 
+class ATank;
+class ATriggerBase;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEncounterStartedSignature, int, TotalTargets);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTargetCountUpdatedSignature, int, TargetCount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEncounterEndedSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEncountersCompletedSignature);
+
 UCLASS()
 class BLASTER_API AEncounterManager : public AActor
 {
@@ -31,12 +39,34 @@ public:
 	TArray<int> CompletedEncounters;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FEncounter TargetEncounter;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<ATriggerBase*, int> EncounterTriggers;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<ATriggerBase*> Encounters; 
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<ATank> TankREF;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnEncounterTriggered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor);
+	void OnEncounterTriggered(AActor* OverlappedActor, AActor* OtherActor);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnTargetDestroyed();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EncounterCompleted();
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ActivateEncounter(int EncounterID);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void DisableTarget(AActor* TargetActor);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EnableTarget(AActor* TargetActor);
+	
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FEncounterStartedSignature OnEncounterStarted;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FTargetCountUpdatedSignature OnTargetCountUpdated;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FEncounterEndedSignature OnEncounterEnded;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FEncountersCompletedSignature OnEncountersCompleted;
 };

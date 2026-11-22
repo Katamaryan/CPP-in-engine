@@ -9,7 +9,7 @@
 class ARocket;
 class UArrowComponent;
 
-UCLASS()
+UCLASS(ABSTRACT)
 class BLASTER_API AEnemyRocket : public ABaseEnemyTurret
 {
 	GENERATED_BODY()

@@ -9,7 +9,7 @@
 class UProjectileMovementComponent;
 class USphereComponent;
 
-UCLASS()
+UCLASS(ABSTRACT)
 class BLASTER_API ARocket : public AActor
 {
 	GENERATED_BODY()

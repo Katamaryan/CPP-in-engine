@@ -8,7 +8,7 @@
 
 class UArrowComponent;
 
-UCLASS()
+UCLASS(ABSTRACT)
 class BLASTER_API AEnemyMachineGun : public ABaseEnemyTurret
 {
 	GENERATED_BODY()

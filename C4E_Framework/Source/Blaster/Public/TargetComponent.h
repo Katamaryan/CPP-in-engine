@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "TargetComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTargetDestroyedSignature, AActor*, Target);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTargetDestroyedSignature);
 
 UCLASS(blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BLASTER_API UTargetComponent : public UActorComponent

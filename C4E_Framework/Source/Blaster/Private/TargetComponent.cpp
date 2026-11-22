@@ -25,7 +25,7 @@ void UTargetComponent::BeginPlay()
 
 void UTargetComponent::OnOwnerDestroyed_Implementation(AActor* DestroyedActor)
 {
-	OnTargetDestroyed.Broadcast(DestroyedActor);
+	OnTargetDestroyed.Broadcast();
 }
 
 void UTargetComponent::ActivateTarget_Implementation()

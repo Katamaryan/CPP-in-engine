@@ -6,7 +6,7 @@
 #include "BaseEnemyTurret.h"
 #include "EnemyLighting.generated.h"
 
-UCLASS()
+UCLASS(ABSTRACT)
 class BLASTER_API AEnemyLighting : public ABaseEnemyTurret
 {
 	GENERATED_BODY()
