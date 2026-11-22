@@ -29,6 +29,7 @@ void ADoor::BeginPlay()
 		_doorTimeline->AddInterpFloat(_doorCurve, _onDoorUpdate);
 		_onDoorFinish.BindDynamic(this, &ADoor::StopDoor_Implementation);
 		_doorTimeline->AddEvent(0.5, _onDoorFinish);
+		_doorTimeline->SetDirectionPropertyName(FName(TEXT("_doorDirection")));
 	}
 }
 
@@ -61,7 +62,7 @@ void ADoor::MoveDoor_Implementation(float value)
 
 void ADoor::StopDoor_Implementation()
 {
-	if (ETimelineDirection::Forward(_doorTimeline, _doorCurve))
+	if (_doorDirection == ETimelineDirection::Forward)
 	{
 		bIsOpen = true;
 	}

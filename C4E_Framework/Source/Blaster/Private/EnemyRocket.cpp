@@ -25,7 +25,7 @@ AEnemyRocket::AEnemyRocket()
 	_arrow.Add(CreateDefaultSubobject<UArrowComponent>(FName("Arrow01")));
 	_arrow[0]->SetupAttachment(_turretPod[0]);
 	_arrow[0]->SetRelativeLocation(FVector(10.0f, -1.0f, 0.0f));
-	_arrow[0]->SetArrowSize(0.2);
+	_arrow[0]->SetArrowSize(0.2f);
 	
 	_rig.Add(CreateDefaultSubobject<UStaticMeshComponent>(FName("Rig02")));
 	_rig[1]->SetupAttachment(_staticMesh[1]);
@@ -36,7 +36,7 @@ AEnemyRocket::AEnemyRocket()
 	_arrow.Add(CreateDefaultSubobject<UArrowComponent>(FName("Arrow02")));
 	_arrow[1]->SetupAttachment(_turretPod[1]);
 	_arrow[1]->SetRelativeLocation(FVector(10.0f, 1.0f, 0.0f));
-	_arrow[1]->SetArrowSize(0.2);
+	_arrow[1]->SetArrowSize(0.2f);
 	
 	RocketShake = CreateDefaultSubobject<UTimelineComponent>(FName("RocketShake"));
 }

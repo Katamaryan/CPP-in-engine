@@ -28,12 +28,16 @@ public:
 	TObjectPtr<UStaticMeshComponent> _doorMesh;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<ETimelineDirection::Type> _doorDirection;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UTimelineComponent> _doorTimeline;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UCurveFloat> _doorCurve;
 	FOnTimelineFloat _onDoorUpdate;
 	FOnTimelineEvent _onDoorFinish;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector DoorOpenOffset;
 	FVector DoorClosed;
 	bool bIsOpen;
