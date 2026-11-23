@@ -124,8 +124,9 @@ void AEncounterManager::OnTargetDestroyed_Implementation()
 
 void AEncounterManager::OnEncounterTriggered_Implementation(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (ATank* tank = Cast<ATank>(OtherActor))
+	if (OtherActor->GetClass() == ATank::StaticClass())
 	{
+		
 		ATriggerBase* trigger = Cast<ATriggerBase>(OverlappedActor);
 		int* ID = EncounterTriggers.Find(trigger) ;
 		if (ID)

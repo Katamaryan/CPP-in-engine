@@ -3,6 +3,9 @@
 
 #include "EncounterRule.h"
 
+#include "EncounterManager.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values for this component's properties
 UEncounterRule::UEncounterRule()
@@ -23,6 +26,22 @@ void UEncounterRule::BeginPlay()
 	// ...
 	
 }
+
+void UEncounterRule::InitRule(int ID)
+{
+	Super::InitRule(ID);
+	
+	EncounterManager = Cast<AEncounterManager>(UGameplayStatics::GetActorOfClass(this, AEncounterManager::StaticClass()));
+	EncounterManager->OnEncountersCompleted.AddDynamic(this, &UEncounterRule::CompleteRule);
+}
+
+void UEncounterRule::CompleteRule()
+{
+	Completed = true;
+	OnRuleCompleted.Broadcast(RuleID, Completed);
+}
+
+
 
 
 

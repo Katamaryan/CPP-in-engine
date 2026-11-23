@@ -7,6 +7,8 @@
 #include "EncounterRule.generated.h"
 
 
+class AEncounterManager;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BLASTER_API UEncounterRule : public UBaseGameRule
 {
@@ -21,5 +23,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<AEncounterManager> EncounterManager;
+	
+	void InitRule(int ID);
+	void CompleteRule();
 };
