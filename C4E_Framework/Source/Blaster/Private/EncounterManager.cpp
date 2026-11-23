@@ -63,9 +63,12 @@ void AEncounterManager::ActivateEncounter_Implementation(int EncounterID)
 	
 	if (TargetEncounter.EncounterID == -1) {return;}
 
+	CurrentTargetCount = 0;
 	for	( int i = 0; i < TargetEncounter.EncounterActors.Num(); i++)
 	{
 		UTargetComponent* targetComp = TargetEncounter.EncounterActors[i]->GetComponentByClass<UTargetComponent>();
+		if (!IsValid(targetComp)) 
+			continue;
 		targetComp->OnTargetDestroyed.AddDynamic(this, &AEncounterManager::OnTargetDestroyed);
 		CurrentTargetCount++;
 		targetComp->ActivateTarget();
@@ -124,7 +127,7 @@ void AEncounterManager::OnTargetDestroyed_Implementation()
 
 void AEncounterManager::OnEncounterTriggered_Implementation(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (OtherActor->GetClass() == ATank::StaticClass())
+	if (OtherActor->IsA(ATank::StaticClass()))
 	{
 		
 		ATriggerBase* trigger = Cast<ATriggerBase>(OverlappedActor);

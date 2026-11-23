@@ -23,11 +23,13 @@ void ADoor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	DoorClosed = _doorMesh->GetComponentLocation();
+	
 	if (_doorCurve)
 	{
-		_onDoorUpdate.BindDynamic(this, &ADoor::MoveDoor_Implementation);
+		_onDoorUpdate.BindDynamic(this, &ADoor::MoveDoor);
 		_doorTimeline->AddInterpFloat(_doorCurve, _onDoorUpdate);
-		_onDoorFinish.BindDynamic(this, &ADoor::StopDoor_Implementation);
+		_onDoorFinish.BindDynamic(this, &ADoor::StopDoor);
 		_doorTimeline->AddEvent(0.5, _onDoorFinish);
 		_doorTimeline->SetDirectionPropertyName(FName(TEXT("_doorDirection")));
 	}
@@ -47,7 +49,8 @@ void ADoor::Interact_Implementation(APawn* InteractorPawn)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
 			FString::Printf(TEXT("Door Open")));
 	}
-	
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+			FString::Printf(TEXT("%hs"), bIsOpen? "true" : "false" ));
 	if (bIsOpen)
 		_doorTimeline->Stop();
 	else

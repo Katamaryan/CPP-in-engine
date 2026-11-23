@@ -44,9 +44,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<ATriggerBase*> Encounters; 
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<ATank> TankREF;
-	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnEncounterTriggered(AActor* OverlappedActor, AActor* OtherActor);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
