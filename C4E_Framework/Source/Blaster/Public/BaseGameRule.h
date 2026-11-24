@@ -30,14 +30,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool MajorRule;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class UUserWidget> RuleUI;
+	TSubclassOf<UUserWidget> RuleUI;
 	
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void InitRule(int ID);
+	UFUNCTION(BlueprintCallable)
+	virtual void InitRule(int ID);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void UpdateRuleConditions();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void CompleteRule();
+	UFUNCTION(BlueprintCallable)
+	virtual void CompleteRule();
 	
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FRuleCompletedSignature OnRuleCompleted;

@@ -38,7 +38,7 @@ void UEndReachedRule::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void UEndReachedRule::InitRule(int ID)
 {
-	Super::InitRule_Implementation(ID);
+	Super::InitRule(ID);
 	
 	EndPoint = Cast<AEndPoint>(UGameplayStatics::GetActorOfClass(this, AEndPoint::StaticClass()));
 	

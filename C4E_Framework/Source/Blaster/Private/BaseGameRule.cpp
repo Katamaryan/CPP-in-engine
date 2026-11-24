@@ -24,7 +24,7 @@ void UBaseGameRule::BeginPlay()
 	
 }
 
-void UBaseGameRule::CompleteRule_Implementation()
+void UBaseGameRule::CompleteRule()
 {
 	OnRuleCompleted.Broadcast(RuleID, Completed);
 }
@@ -34,7 +34,7 @@ void UBaseGameRule::UpdateRuleConditions_Implementation()
 	
 }
 
-void UBaseGameRule::InitRule_Implementation(int ID)
+void UBaseGameRule::InitRule(int ID)
 {
 	RuleID = ID;
 }

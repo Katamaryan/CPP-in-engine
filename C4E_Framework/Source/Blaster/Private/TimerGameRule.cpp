@@ -35,7 +35,7 @@ void UTimerGameRule::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 void UTimerGameRule::InitRule(int ID)
 {
-	Super::InitRule_Implementation(ID);
+	Super::InitRule(ID);
 	
 	GetWorld()->GetTimerManager().SetTimer(Timer,this, &UTimerGameRule::TimerEnded_Implementation, TimerLength);
 	

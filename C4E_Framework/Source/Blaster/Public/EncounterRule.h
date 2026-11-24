@@ -26,6 +26,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<AEncounterManager> EncounterManager;
 	
-	void InitRule(int ID) ;
-	void CompleteRule() ;
+	virtual void InitRule(int ID) override;
+	virtual void CompleteRule() override;
 };

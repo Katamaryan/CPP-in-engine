@@ -35,7 +35,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
-	void InitRule(int ID) ;
+	virtual void InitRule(int ID) override;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void TimerCheck();
