@@ -4,6 +4,7 @@
 #include "EncountersUIWidget.h"
 
 #include "EncounterManager.h"
+#include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 
 void UEncountersUIWidget::NativeConstruct()
@@ -23,8 +24,8 @@ void UEncountersUIWidget::NativeConstruct()
 void UEncountersUIWidget::OnEncounterStarted_Implementation(int TotalTargetsParameter)
 {
 	TotalTargets = TotalTargetsParameter;
+	T_Encounters->SetText(FText::FromString(FString::Printf(TEXT("Encounter: %d/%d"), TotalTargets,TotalTargetsParameter)));
 	
-	//T_Encounters = FText::Format(NSLOCTEXT("Encounter:" "{0}/{1}"), (FText::AsNumber(TotalTargetsParameter), FText::AsNumber(TotalTargets)));
 }
 
 void UEncountersUIWidget::OnTargetCountUpdated_Implementation(int TotalCount)

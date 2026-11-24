@@ -54,7 +54,7 @@ void AEncounterManager::ActivateEncounter_Implementation(int EncounterID)
 	
 	for (int i = 0; i < LevelEncounters.Num(); i++)
 	{
-		if (EncounterID == TargetEncounter.EncounterID)
+		if (EncounterID == LevelEncounters[i].EncounterID)
 		{
 			TargetEncounter = LevelEncounters[i];
 			break;
@@ -131,10 +131,10 @@ void AEncounterManager::OnEncounterTriggered_Implementation(AActor* OverlappedAc
 	{
 		
 		ATriggerBase* trigger = Cast<ATriggerBase>(OverlappedActor);
-		int* ID = EncounterTriggers.Find(trigger) ;
-		if (ID)
+		 
+		if (EncounterTriggers.Find(trigger))
 		{
-			ActivateEncounter(*ID);
+			ActivateEncounter(*EncounterTriggers.Find(trigger));
 		}
 		trigger->SetActorEnableCollision(false);
 	}

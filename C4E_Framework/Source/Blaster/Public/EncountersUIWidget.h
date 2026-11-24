@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Runtime/UMG/Public/Blueprint/UserWidget.h"
 #include "EncountersUIWidget.generated.h"
 
 class AEncounterManager;
