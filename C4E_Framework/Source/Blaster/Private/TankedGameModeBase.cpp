@@ -37,8 +37,8 @@ void ATankedGameModeBase::CreateUIElementsForRules_Implementation()
 void ATankedGameModeBase::OnRuleCompleted_Implementation(int ruleID, bool successful)
 {
 	
-	if (CheckRules_Implementation(ruleID, successful))
-		EndGame_Implementation();
+	if (CheckRules(ruleID, successful))
+		EndGame();
 }
 
 void ATankedGameModeBase::EndGame_Implementation()

@@ -22,6 +22,6 @@ protected:
 public:
 	
 	
-	UFUNCTION( BlueprintCallable, BlueprintNativeEvent )
-	void InitRules(TArray<TObjectPtr<UBaseGameRule>> ActiveRules );
+	UFUNCTION( BlueprintCallable )
+	void InitRules(TArray<UBaseGameRule*> Rules );
 };

@@ -4,15 +4,17 @@
 #include "ObjectiveUIWidgetU.h"
 
 #include "BaseGameRule.h"
+#include "Components/PanelWidget.h"
 #include "Kismet/GameplayStatics.h"
 
-void UObjectiveUIWidgetU::InitRules_Implementation(TArray<TObjectPtr<UBaseGameRule>> ActiveRules)
+void UObjectiveUIWidgetU::InitRules(TArray<UBaseGameRule*> Rules)
 {
-	for ( int i = 0; i< ActiveRules.Num(); i++)
+	for ( int i = 0; i< Rules.Num(); i++)
 	{
-		if (UKismetSystemLibrary::IsValidClass(ActiveRules[i]->RuleUI))
+		if (UKismetSystemLibrary::IsValidClass(Rules[i]->RuleUI))
 		{
-			//CreateWidget<ActiveRules[i]->RuleUI>(nullptr, ActiveRules[i]->RuleUI->GetClass()::StaticClass<>());
+			ObjectivesPanel->AddChild(CreateWidget<UUserWidget, UObjectiveUIWidgetU*>(this, Rules[i]->RuleUI.Get()));
 		}
 	}
 }
+
