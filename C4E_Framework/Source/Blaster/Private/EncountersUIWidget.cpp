@@ -21,17 +21,26 @@ void UEncountersUIWidget::NativeConstruct()
 	}
 }
 
+void UEncountersUIWidget::SetVisibilityCollapsed_Implementation()
+{
+	TEncounters->SetVisibility(ESlateVisibility::Collapsed);
+}
+
 void UEncountersUIWidget::OnEncounterStarted_Implementation(int TotalTargetsParameter)
 {
 	TotalTargets = TotalTargetsParameter;
-	T_Encounters->SetText(FText::FromString(FString::Printf(TEXT("Encounter: %d/%d"), TotalTargets,TotalTargetsParameter)));
-	
+	TEncounters->SetText(FText::FromString(FString::Printf(TEXT("Encounter: %d/%d"), TotalTargets,TotalTargetsParameter)));
+	TEncounters->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UEncountersUIWidget::OnTargetCountUpdated_Implementation(int TotalCount)
 {
+	TEncounters->SetText(FText::FromString(FString::Printf(TEXT("Encounter: %d/%d"), TotalCount,TotalTargets)));
+	
 }
 
 void UEncountersUIWidget::OnEncounterEnded_Implementation()
 {
+	TEncounters->SetText(FText::FromString(FString::Printf(TEXT("Encounter Completed!"))));
+	GetWorld()->GetTimerManager().SetTimer(DelayTimer, this, &UEncountersUIWidget::SetVisibilityCollapsed_Implementation, 1.0f);
 }
